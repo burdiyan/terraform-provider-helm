@@ -52,7 +52,7 @@ func Provider() terraform.ResourceProvider {
 			"tiller_image": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Default:     "gcr.io/kubernetes-helm/tiller:v2.6.0",
+				Default:     "gcr.io/kubernetes-helm/tiller:v2.7.2",
 				Description: "Tiller image to install. If Tiller is not already installed.",
 			},
 			"debug": {
@@ -163,7 +163,7 @@ func Provider() terraform.ResourceProvider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"helm_release":      resourceRelease(),
+			"helm_release":    resourceRelease(),
 			"helm_repository": resourceRepository(),
 		},
 		ConfigureFunc: providerConfigure,
