@@ -3,3 +3,4 @@ build
 assets
 .terraform
 _output/
+_build/

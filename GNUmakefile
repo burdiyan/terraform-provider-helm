@@ -65,24 +65,13 @@ test-compile: fmtcheck
 	fi
 	go test -c $(TEST) $(TESTARGS)
 
-packages:
-	@for os in $(PKG_OS); do \
-		for arch in $(PKG_ARCH); do \
-			mkdir -p $(BUILD_PATH)/$(PROVIDER)_$${os}_$${arch} && \
-			cd $(BASE_PATH) && \
-			GOOS=$${os} GOARCH=$${arch} go build -o $(BUILD_PATH)/$(PROVIDER)_$${os}_$${arch}/$(PROVIDER) . && \
-			cd $(BUILD_PATH) && \
-			tar -cvzf $(BUILD_PATH)/$(PROVIDER)_$(BRANCH)_$${os}_$${arch}.tar.gz $(PROVIDER)_$${os}_$${arch}/; \
-		done; \
-	done;
-
 clean:
 	@rm -rf $(BUILD_PATH)
 
 crossbuild:
-	@gox -osarch "darwin/amd64 linux/amd64" -output "dist/{{.Dir}}_{{.OS}}_{{.Arch}}"
+	@gox -osarch "darwin/amd64 linux/amd64" -output "_build/{{.OS}}_{{.Arch}}/{{.Dir}}"
 
 release:
-	@ghr -t ${GITHUB_TOKEN} -u burdiyan -r terraform-provider-helm --replace `git describe --tags` dist/
+	@ghr -t ${GITHUB_TOKEN} -u ${GITHUB_USER} -r terraform-provider-helm --replace `git describe --tags` _build/
 
 .PHONY: crossbuild release build test testacc testrace cover vet fmt fmtcheck errcheck vendor-status test-compile
