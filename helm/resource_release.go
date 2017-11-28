@@ -30,6 +30,10 @@ func resourceRelease() *schema.Resource {
 		Delete: resourceReleaseDelete,
 		Update: resourceReleaseUpdate,
 		Exists: resourceReleaseExists,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
+
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:        schema.TypeString,
@@ -278,7 +282,7 @@ func resourceReleaseUpdate(d *schema.ResourceData, meta interface{}) error {
 func resourceReleaseDelete(d *schema.ResourceData, meta interface{}) error {
 	m := meta.(*Meta)
 
-	name := d.Get("name").(string)
+	name := d.Id()
 	opts := []helm.DeleteOption{
 		helm.DeleteDisableHooks(d.Get("disable_webhooks").(bool)),
 		helm.DeletePurge(true),
@@ -388,7 +392,7 @@ var all = []release.Status_Code{
 }
 
 func getRelease(client helm.Interface, d *schema.ResourceData) (*release.Release, error) {
-	name := d.Get("name").(string)
+	name := d.Id()
 
 	res, err := client.ListReleases(
 		helm.ReleaseListFilter(name),
