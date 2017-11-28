@@ -68,10 +68,11 @@ test-compile: fmtcheck
 clean:
 	@rm -rf $(BUILD_PATH)
 
-crossbuild:
-	@gox -osarch "darwin/amd64 linux/amd64" -output "_build/{{.OS}}_{{.Arch}}/{{.Dir}}"
+gox:
+	@rm -rf _build/*
+	@gox -osarch "darwin/amd64 linux/amd64" -output "_build/{{.Dir}}_{{.OS}}_{{.Arch}}"
 
 release:
-	@ghr -t ${GITHUB_TOKEN} -u ${GITHUB_USER} -r terraform-provider-helm --replace `git describe --tags` _build/
+	@ghr -t ${GITHUB_TOKEN} -u ${GITHUB_USER} -r terraform-provider-helm --replace `git describe --tags` _build
 
-.PHONY: crossbuild release build test testacc testrace cover vet fmt fmtcheck errcheck vendor-status test-compile
+.PHONY: gox release build test testacc testrace cover vet fmt fmtcheck errcheck vendor-status test-compile
