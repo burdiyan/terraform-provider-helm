@@ -509,7 +509,7 @@
 
 [[projects]]
   name = "golang.org/x/crypto"
-  packages = ["bcrypt","blowfish","cast5","openpgp","openpgp/armor","openpgp/elgamal","openpgp/errors","openpgp/packet","openpgp/s2k","pbkdf2","scrypt","ssh/terminal"]
+  packages = ["bcrypt","blowfish","cast5","openpgp","openpgp/armor","openpgp/clearsign","openpgp/elgamal","openpgp/errors","openpgp/packet","openpgp/s2k","pbkdf2","scrypt","ssh/terminal"]
   revision = "81e90905daefcd6fd217b62423c0908922eadb30"
 
 [[projects]]
@@ -548,6 +548,12 @@
   revision = "3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4"
 
 [[projects]]
+  branch = "v1"
+  name = "gopkg.in/yaml.v1"
+  packages = ["."]
+  revision = "9f9df34309c04878acc86042b16630b0f696e1de"
+
+[[projects]]
   name = "gopkg.in/yaml.v2"
   packages = ["."]
   revision = "53feefa2559fb8dfa8d81baad31be332c97d6c77"
@@ -579,7 +585,7 @@
 
 [[projects]]
   name = "k8s.io/helm"
-  packages = ["cmd/helm/installer","pkg/chartutil","pkg/engine","pkg/helm","pkg/helm/environment","pkg/helm/helmpath","pkg/helm/portforwarder","pkg/ignore","pkg/kube","pkg/proto/hapi/chart","pkg/proto/hapi/release","pkg/proto/hapi/services","pkg/proto/hapi/version","pkg/releaseutil","pkg/storage","pkg/storage/driver","pkg/strvals","pkg/tiller/environment","pkg/version"]
+  packages = ["cmd/helm/installer","pkg/chartutil","pkg/downloader","pkg/engine","pkg/getter","pkg/helm","pkg/helm/environment","pkg/helm/helmpath","pkg/helm/portforwarder","pkg/ignore","pkg/kube","pkg/plugin","pkg/proto/hapi/chart","pkg/proto/hapi/release","pkg/proto/hapi/services","pkg/proto/hapi/version","pkg/provenance","pkg/releaseutil","pkg/repo","pkg/resolver","pkg/storage","pkg/storage/driver","pkg/strvals","pkg/tiller/environment","pkg/tlsutil","pkg/urlutil","pkg/version"]
   revision = "8478fb4fc723885b155c924d1c8c410b7a9444e6"
   version = "v2.7.2"
 
@@ -611,6 +617,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "01efe99e554bf56c3869a285f5fe4da28fedf188c412bfa623f44d1b4b1a97c2"
+  inputs-digest = "17394e71c529d950bc994f5bf028f5c007b1345f9c986b5c107728c4a5ea32bb"
   solver-name = "gps-cdcl"
   solver-version = 1

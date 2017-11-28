@@ -83,6 +83,6 @@ crossbuild:
 	@gox -osarch "darwin/amd64 linux/amd64" -output "dist/{{.Dir}}_{{.OS}}_{{.Arch}}"
 
 release:
-	@ghr -t ${GITHUB_TOKEN} -u burdiyan -r helm-update-config --replace `git describe --tags` dist/
+	@ghr -t ${GITHUB_TOKEN} -u burdiyan -r terraform-provider-helm --replace `git describe --tags` dist/
 
 .PHONY: crossbuild release build test testacc testrace cover vet fmt fmtcheck errcheck vendor-status test-compile

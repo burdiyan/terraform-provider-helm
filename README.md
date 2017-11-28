@@ -1,3 +1,15 @@
+# NOTE
+
+This is a quick and dirty fork of original mcuadros/terraform-provider-helm. 
+
+These are the changes made: 
+
+- Rename `helm_chart` to `helm_release` since that is the correct wording used by Helm.
+- Add `reuse_values` option to the release.
+- Use `dep` instead of `glide` and update Terraform and Helm dependencies.
+
+Tests may not pass, but everything is working fine. This is a quick fork for getting the job done. The changes may will be submitted to the upstream.
+
 Terraform Provider for Helm
 ===========================
 
