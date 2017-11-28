@@ -79,4 +79,10 @@ packages:
 clean:
 	@rm -rf $(BUILD_PATH)
 
-.PHONY: build test testacc testrace cover vet fmt fmtcheck errcheck vendor-status test-compile
+crossbuild:
+	@gox -osarch "darwin/amd64 linux/amd64" -output "dist/{{.Dir}}_{{.OS}}_{{.Arch}}"
+
+release:
+	@ghr -t ${GITHUB_TOKEN} -u burdiyan -r helm-update-config --replace `git describe --tags` dist/
+
+.PHONY: crossbuild release build test testacc testrace cover vet fmt fmtcheck errcheck vendor-status test-compile
