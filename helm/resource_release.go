@@ -23,13 +23,13 @@ import (
 
 var ErrReleaseNotFound = errors.New("release not found")
 
-func resourceChart() *schema.Resource {
+func resourceRelease() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceChartCreate,
-		Read:   resourceChartRead,
-		Delete: resourceChartDelete,
-		Update: resourceChartUpdate,
-		Exists: resourceChartExists,
+		Create: resourceReleaseCreate,
+		Read:   resourceReleaseRead,
+		Delete: resourceReleaseDelete,
+		Update: resourceReleaseUpdate,
+		Exists: resourceReleaseExists,
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:        schema.TypeString,
@@ -47,7 +47,7 @@ func resourceChart() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: "Chart name to be installed.",
+				Description: "Chart name to be installed. Can also be path to local chart (in this case repository will be ignored).",
 			},
 			"version": {
 				Type:        schema.TypeString,
@@ -82,11 +82,6 @@ func resourceChart() *schema.Resource {
 				Default:     "default",
 				Description: "Namespace to install the release into.",
 			},
-			"repository_url": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "Repository URL where to locate the requested chart without install the repository.",
-			},
 			"verify": {
 				Type:        schema.TypeBool,
 				Optional:    true,
@@ -118,6 +113,11 @@ func resourceChart() *schema.Resource {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Description: "On update performs pods restart for the resource if applicable.",
+			},
+			"reuse_values": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Reuse release values when doing update.",
 			},
 			"metadata": {
 				Type:        schema.TypeSet,
@@ -162,7 +162,7 @@ func resourceChart() *schema.Resource {
 	}
 }
 
-func resourceChartCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceReleaseCreate(d *schema.ResourceData, meta interface{}) error {
 	m := meta.(*Meta)
 	c, err := m.GetHelmClient()
 	if err != nil {
@@ -175,7 +175,7 @@ func resourceChartCreate(d *schema.ResourceData, meta interface{}) error {
 			return setIdAndMetadataFromRelease(d, r)
 		}
 
-		if err := resourceChartDelete(d, meta); err != nil {
+		if err := resourceReleaseDelete(d, meta); err != nil {
 			return err
 		}
 	}
@@ -211,7 +211,7 @@ func resourceChartCreate(d *schema.ResourceData, meta interface{}) error {
 	return setIdAndMetadataFromRelease(d, res.Release)
 }
 
-func resourceChartRead(d *schema.ResourceData, meta interface{}) error {
+func resourceReleaseRead(d *schema.ResourceData, meta interface{}) error {
 	m := meta.(*Meta)
 	c, err := m.GetHelmClient()
 	if err != nil {
@@ -239,7 +239,7 @@ func setIdAndMetadataFromRelease(d *schema.ResourceData, r *release.Release) err
 	}})
 }
 
-func resourceChartUpdate(d *schema.ResourceData, meta interface{}) error {
+func resourceReleaseUpdate(d *schema.ResourceData, meta interface{}) error {
 	m := meta.(*Meta)
 
 	values, err := getValues(d)
@@ -258,6 +258,7 @@ func resourceChartUpdate(d *schema.ResourceData, meta interface{}) error {
 		helm.UpgradeForce(d.Get("force_update").(bool)),
 		helm.UpgradeDisableHooks(d.Get("disable_webhooks").(bool)),
 		helm.UpgradeTimeout(int64(d.Get("timeout").(int))),
+		helm.ReuseValues(d.Get("reuse_values").(bool)),
 		helm.UpgradeWait(true),
 	}
 
@@ -274,7 +275,7 @@ func resourceChartUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	return setIdAndMetadataFromRelease(d, res.Release)
 }
-func resourceChartDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceReleaseDelete(d *schema.ResourceData, meta interface{}) error {
 	m := meta.(*Meta)
 
 	name := d.Get("name").(string)
@@ -297,7 +298,7 @@ func resourceChartDelete(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func resourceChartExists(d *schema.ResourceData, meta interface{}) (bool, error) {
+func resourceReleaseExists(d *schema.ResourceData, meta interface{}) (bool, error) {
 	m := meta.(*Meta)
 	c, err := m.GetHelmClient()
 	if err != nil {
