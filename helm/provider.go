@@ -5,6 +5,7 @@ import (
 	"crypto/x509"
 	"fmt"
 	"log"
+	"sync"
 	"time"
 
 	"github.com/hashicorp/terraform/helper/pathorcontents"
@@ -163,7 +164,7 @@ func Provider() terraform.ResourceProvider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"helm_release":      resourceRelease(),
+			"helm_release":    resourceRelease(),
 			"helm_repository": resourceRepository(),
 		},
 		ConfigureFunc: providerConfigure,
@@ -182,7 +183,9 @@ type Meta struct {
 	Tunnel           *kube.Tunnel
 	DefaultNamespace string
 
-	data       *schema.ResourceData
+	data *schema.ResourceData
+
+	mu         sync.Mutex
 	helmClient helm.Interface
 }
 
@@ -202,11 +205,13 @@ func NewMeta(d *schema.ResourceData) (*Meta, error) {
 }
 
 func (m *Meta) GetHelmClient() (helm.Interface, error) {
+	m.mu.Lock()
 	if m.helmClient == nil {
 		if err := m.connect(); err != nil {
 			return nil, err
 		}
 	}
+	m.mu.Unlock()
 
 	return m.helmClient, nil
 }
