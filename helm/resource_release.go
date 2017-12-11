@@ -393,7 +393,7 @@ var all = []release.Status_Code{
 }
 
 func getRelease(client helm.Interface, d *schema.ResourceData) (*release.Release, error) {
-	name := d.Id()
+	name := d.Get("name").(string)
 
 	res, err := client.ReleaseContent(name)
 	errDesc := grpc.ErrorDesc(err)
