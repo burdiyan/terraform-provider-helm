@@ -124,6 +124,12 @@ func resourceRelease() *schema.Resource {
 				Optional:    true,
 				Description: "Reuse release values when doing update.",
 			},
+			"wait": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+				Description: "Whether to wait for an install to complete before marking the release as deployed.",
+			},
 			"metadata": {
 				Type:        schema.TypeSet,
 				Computed:    true,
@@ -204,7 +210,7 @@ func resourceReleaseCreate(d *schema.ResourceData, meta interface{}) error {
 		helm.ValueOverrides(values),
 		helm.InstallDisableHooks(d.Get("disable_webhooks").(bool)),
 		helm.InstallTimeout(int64(d.Get("timeout").(int))),
-		helm.InstallWait(true),
+		helm.InstallWait(d.Get("wait").(bool)),
 	}
 
 	ns := d.Get("namespace").(string)
