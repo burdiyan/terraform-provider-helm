@@ -264,7 +264,7 @@ func resourceReleaseUpdate(d *schema.ResourceData, meta interface{}) error {
 		helm.UpgradeDisableHooks(d.Get("disable_webhooks").(bool)),
 		helm.UpgradeTimeout(int64(d.Get("timeout").(int))),
 		helm.ReuseValues(d.Get("reuse_values").(bool)),
-		helm.UpgradeWait(true),
+		helm.UpgradeWait(d.Get("wait").(bool)),
 	}
 
 	c, err := m.GetHelmClient()
