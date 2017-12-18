@@ -12,7 +12,7 @@ import (
 	"k8s.io/helm/pkg/helm"
 )
 
-func TestAccResourceChart_basic(t *testing.T) {
+func TestAccResourceRelease_basic(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckHelmChartDestroy,
@@ -37,7 +37,7 @@ func TestAccResourceChart_basic(t *testing.T) {
 	})
 }
 
-func TestAccResourceChart_update(t *testing.T) {
+func TestAccResourceRelease_update(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckHelmChartDestroy,
@@ -59,7 +59,7 @@ func TestAccResourceChart_update(t *testing.T) {
 	})
 }
 
-func TestAccResourceChart_repository(t *testing.T) {
+func TestAccResourceRelease_repository(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{{
@@ -80,7 +80,7 @@ func TestAccResourceChart_repository(t *testing.T) {
 	})
 }
 
-func TestAccResourceChart_updateAfterFail(t *testing.T) {
+func TestAccResourceRelease_updateAfterFail(t *testing.T) {
 	malformed := `
 	resource "helm_chart" "test" {
 	  name        = "malformed"
@@ -132,7 +132,7 @@ func testAccHelmChartConfigBasic(ns, name, version string) string {
 }
 
 func TestGetValues(t *testing.T) {
-	d := resourceChart().Data(nil)
+	d := resourceRelease().Data(nil)
 	d.Set("values", `foo: bar`)
 	d.Set("set", []interface{}{
 		map[string]interface{}{"name": "foo", "value": "qux"},

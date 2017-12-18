@@ -26,6 +26,8 @@ var ErrReleaseNotFound = errors.New("release not found")
 
 func resourceRelease() *schema.Resource {
 	return &schema.Resource{
+		SchemaVersion: 1,
+		MigrateState: resourceReleaseMigrateState,
 		Create: resourceReleaseCreate,
 		Read:   resourceReleaseRead,
 		Delete: resourceReleaseDelete,
@@ -135,11 +137,6 @@ func resourceRelease() *schema.Resource {
 							Computed:    true,
 							Description: "Name is the name of the release.",
 						},
-						"revision": {
-							Type:        schema.TypeInt,
-							Computed:    true,
-							Description: "Version is an int32 which represents the version of the release.",
-						},
 						"namespace": {
 							Type:        schema.TypeString,
 							Computed:    true,
@@ -236,7 +233,6 @@ func setIdAndMetadataFromRelease(d *schema.ResourceData, r *release.Release) err
 
 	return d.Set("metadata", []map[string]interface{}{{
 		"name":      r.Name,
-		"revision":  r.Version,
 		"namespace": r.Namespace,
 		"status":    r.Info.Status.Code.String(),
 		"chart":     r.Chart.Metadata.Name,
