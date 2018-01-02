@@ -126,6 +126,12 @@ func resourceRelease() *schema.Resource {
 				Optional:    true,
 				Description: "Reuse release values when doing update.",
 			},
+			"wait": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     true,
+				Description: "wait when doing update.",
+			},
 			"metadata": {
 				Type:        schema.TypeSet,
 				Computed:    true,
