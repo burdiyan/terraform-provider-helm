@@ -27,12 +27,12 @@ var ErrReleaseNotFound = errors.New("release not found")
 func resourceRelease() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
-		MigrateState: resourceReleaseMigrateState,
-		Create: resourceReleaseCreate,
-		Read:   resourceReleaseRead,
-		Delete: resourceReleaseDelete,
-		Update: resourceReleaseUpdate,
-		Exists: resourceReleaseExists,
+		MigrateState:  resourceReleaseMigrateState,
+		Create:        resourceReleaseCreate,
+		Read:          resourceReleaseRead,
+		Delete:        resourceReleaseDelete,
+		Update:        resourceReleaseUpdate,
+		Exists:        resourceReleaseExists,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
@@ -130,7 +130,7 @@ func resourceRelease() *schema.Resource {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     true,
-				Description: "wait when doing update.",
+				Description: "Wait until finish when interacting with Tiller.",
 			},
 			"metadata": {
 				Type:        schema.TypeSet,
@@ -207,7 +207,7 @@ func resourceReleaseCreate(d *schema.ResourceData, meta interface{}) error {
 		helm.ValueOverrides(values),
 		helm.InstallDisableHooks(d.Get("disable_webhooks").(bool)),
 		helm.InstallTimeout(int64(d.Get("timeout").(int))),
-		helm.InstallWait(true),
+		helm.InstallWait(d.Get("wait").(bool)),
 	}
 
 	ns := d.Get("namespace").(string)
