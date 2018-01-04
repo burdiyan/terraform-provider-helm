@@ -88,6 +88,7 @@ func resourceRelease() *schema.Resource {
 				Optional:    true,
 				Default:     "default",
 				Description: "Namespace to install the release into.",
+				ForceNew:    true,
 			},
 			"verify": {
 				Type:        schema.TypeBool,
