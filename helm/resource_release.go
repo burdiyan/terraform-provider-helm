@@ -105,6 +105,12 @@ func resourceRelease() *schema.Resource {
 				Optional:    true,
 				Description: "Prevent hooks from running.",
 			},
+			"reuse_values": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Reuse values when upgrading the release.",
+				Default:     false,
+			},
 			"force_update": {
 				Type:        schema.TypeBool,
 				Optional:    true,
@@ -254,6 +260,7 @@ func resourceReleaseUpdate(d *schema.ResourceData, meta interface{}) error {
 		helm.UpgradeForce(d.Get("force_update").(bool)),
 		helm.UpgradeDisableHooks(d.Get("disable_webhooks").(bool)),
 		helm.UpgradeTimeout(int64(d.Get("timeout").(int))),
+		helm.ReuseValues(d.Get("reuse_values").(bool)),
 		helm.UpgradeWait(true),
 	}
 
