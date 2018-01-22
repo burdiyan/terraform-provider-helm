@@ -1,5 +1,9 @@
 # NOTE
 
+**UPDATE**
+
+> Changes from this fork were more or less merged to the upstream repository (https://github.com/mcuadros/terraform-provider-helm) and the upstream repository is becoming more stable. I'm going to contribute to upstream from now on, so master branch of this repo won't be maintained. You probably will have to modify your state file if you started using this fork, and now will switch to the upstream, although, you can just remove the releases from your state file, since this provider will just create them in the state file, if release exists in your cluster.
+
 This is a quick and dirty fork of original mcuadros/terraform-provider-helm. 
 
 These are the changes made: 
